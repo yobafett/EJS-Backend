@@ -1,13 +1,13 @@
 import express from 'express';
-import UsersRouter from './routers/usersRouter.js';
+import PostsRouter from './routers/postsRouter.js';
 import { getConfig } from './utils/common.js';
 
 const { dbHost, dbPort, dbName, dbUser, dbPass, serverPort } = getConfig();
-const usersRouter = new UsersRouter(dbHost, dbPort, dbName, dbUser, dbPass);
+const postRouter = new PostsRouter(dbHost, dbPort, dbName, dbUser, dbPass);
 
 const app = express();
 app.use(express.json());
-app.use('/api', usersRouter.router);
+app.use('/api', postRouter.router);
 
 // app.get('/', (req, res) => {
 //     console.log(req.query);
