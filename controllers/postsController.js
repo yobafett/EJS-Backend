@@ -46,26 +46,32 @@ class PostsController extends DbController {
         });
     }
 
-    //TODO: Need test
     updatePost = (request, response) => {
         const id = parseInt(request.params.id);
         const { title, description, text } = request.body;
 
-        if (!title && !description && !text)
+        if (!title && !description && !text) {
+            response.status(400).send(`No data to update`);
             return;
+        }
 
         super.pool.query(`
             UPDATE posts
             SET
-                ${title ? 'title =' + title + ',' : ''}
-                ${description ? 'description =' + description + ',' : ''}
-                ${text ? 'text =' + text + ',' : ''}
+                ${title ? "title = '" + title + "'," : ''}
+                ${description ? "description = '" + description + "'," : ''}
+                ${text ? "text = '" + text + "'," : ''}
                 updated = now()
             WHERE id = ${id}
+            RETURNING id;
             `, [], (error, results) => {
             if (error)
                 throw error;
-            response.status(200).send(`Post modified with ID: ${id}`);
+
+            if (results.rowCount == 0)
+                response.status(400).send(`Cannot find post with id: ${id}`);
+            else
+                response.status(200).send(`Post modified with ID: ${results.rows[0].id}`);
         });
     }
 
