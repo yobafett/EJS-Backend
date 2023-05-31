@@ -34,6 +34,12 @@ class PostsController extends DbController {
     createPost = (request, response) => {
         const { title, description, text, authorId } = request.body;
 
+        //TODO: Need more data validation
+        if (!title || !description || !text || !authorId) {
+            response.status(400).send(`Not enough data to create`);
+            return;
+        }
+
         super.pool.query(`
             INSERT INTO posts (title, description, text, author_id, created, updated)
             VALUES ('${title}', '${description}', '${text}', '${authorId}', now(), now())
@@ -50,6 +56,7 @@ class PostsController extends DbController {
         const id = parseInt(request.params.id);
         const { title, description, text } = request.body;
 
+        //TODO: Need more data validation
         if (!title && !description && !text) {
             response.status(400).send(`No data to update`);
             return;
