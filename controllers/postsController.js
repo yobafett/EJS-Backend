@@ -87,7 +87,7 @@ class PostsController extends DbController {
                 throw error;
 
             if (results.rowCount == 0)
-                response.status(200).send(`Cannot find post with id: ${id}`);
+                response.status(400).send(`Cannot find post with id: ${id}`);
             else
                 response.status(200).send(`Post deleted with ID: ${results.rows[0].id}`);
         });
