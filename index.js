@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import PostsRouter from './routers/postsRouter.js';
 import { getConfig } from './utils/common.js';
 
@@ -6,6 +7,7 @@ const { dbHost, dbPort, dbName, dbUser, dbPass, serverPort } = getConfig();
 const postRouter = new PostsRouter(dbHost, dbPort, dbName, dbUser, dbPass);
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use('/api', postRouter.router);
 
